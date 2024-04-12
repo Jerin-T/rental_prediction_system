@@ -23,7 +23,7 @@ for i, col in enumerate(numerical_columns.columns):
 plt.tight_layout()  # Adjust spacing between subplots
 plt.show()
 st.pyplot(fig)
-# Assuming you have a DataFrame nameud 'data' with numerical columns
+
 numerical_columns = df.select_dtypes(include='number')
 
 fig1 = plt.figure(figsize=(20, 15))
@@ -63,7 +63,6 @@ plt.title('Count Plot of Type of Flat')
 plt.show()
 st.pyplot(fig8)
 
-
 fig9 = plt.figure(figsize=(14, 8))
 sns.barplot(x='regio1', y='totalRent', data=df, ci=None, estimator=np.mean)
 plt.title('Average Total Rent by Region')
@@ -76,10 +75,6 @@ plt.title('Average Living Space by Type of Flat')
 plt.show()
 st.pyplot(fig10)
 
-# Creating a cross-tabulation between region and hasKitchen
-has_kitchen_ct = pd.crosstab(df['regio1'], df['hasKitchen'])
-
-
 g = sns.FacetGrid(df, col='regio1', hue='typeOfFlat', col_wrap=3)
 g.map_dataframe(sns.scatterplot, x='livingSpace', y='totalRent')
 g.add_legend()
@@ -87,8 +82,6 @@ plt.figure(figsize=(18,9))
 plt.suptitle('Living Space vs. Total Rent Faced by Region and Type of Flat')
 plt.show()
 st.pyplot(g)
-
-
 
 f3 = plt.figure(figsize=(12, 6))
 sns.scatterplot(x='livingSpace', y='totalRent', size='noRooms', hue='typeOfFlat', data=df, alpha=0.6)
