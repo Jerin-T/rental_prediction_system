@@ -1,6 +1,6 @@
 Apartment Rental Prediction in Germany by Group 2 
 
-# Apartment Rental Analysis Overview
+# Apartment Rental Prediction Overview
 
 ## Introduction
 
@@ -20,6 +20,9 @@ The analysis employs a combination of data cleaning, exploratory data analysis (
 The analysis was conducted using various tools and technologies, including:
 - Python programming language and various libraries
 - Google Colab - Jupyter Notebook
+- Various Machine Learning models
+- Flask 
+- StreamLit
 
 ## Contributors
 
@@ -31,4 +34,8 @@ This project was a collaborative effort. Contributors include:
 - SANIKA SABEESH
 - SNEHA SUJATHA
 - TANVI TAKKAR
+
+## How to use the project
+
+- Using the link provided in the report, the users can start the streamlit app and thus the visualisations are created and are shown to the user.
 ---
