@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Prediction Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #9ed5ff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            color: rgb(246, 246, 246);
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to bottom right, #004855, #564aff);
+
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            display: grid;
+            grid-gap: 20px;
+        }
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-group select, .form-group input[type="text"] {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: calc(100% - 20px); /* Set width to match drop-down menu field length */
+    }
+        .calculate-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #5480ae;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .calculate-btn:hover {
+            background-color: #092039;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Rent Prediction Form</h2>
+    <form id="rentPredictionForm" method="post" onsubmit="return calculateRent()">
+        <div class="form-group">
+            <label for="newlyConst">Looking for a newly constructed Space?</label>
+            <select id="newlyConst" name="newlyConst" oninput="validateNewlyConst()">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="typeOfFlat">Choose the type of home you are looking for</label>
+            <select id="typeOfFlat" name="typeOfFlat">
+                <option value="1">Ground Floor</option>
+                <option value="2">Raised Ground Floor</option>
+                <option value="3">Apartment</option>
+                <option value="4">Roof Storey</option>
+                <option value="5">Terraced Flat</option>
+                <option value="6">Half Basement</option>
+                <option value="7">Maisonette</option>
+                <option value="8">Penthouse</option>
+                <option value="9">Loft</option>
+                <option value="10">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="livingSpace">What's your preferred living space area? (sqm) </label>
+            <input type="text" id="livingSpace" name="livingSpace" required oninput="validateLivingSpace()">
+            <span id="livingSpaceError" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label for="noRoomsRange">Number of Rooms</label>
+            <input type="text" id="noRoomsRange" name="noRoomsRange" required oninput="validateNoRoomsRange()">
+            <span id="noRoomsRangeError" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label for="hasKitchen">Kitchen Needed?</label>
+            <select id="hasKitchen" name="hasKitchen">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="balcony">Balcony Needed?</label>
+            <select id="balcony" name="balcony">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="geo_plz">Area Code (German standard)</label>
+            <input type="text" id="geo_plz" name="geo_plz" required oninput="validateGeoPlz()">
+            <span id="geo_plzError" class="error"></span>
+        </div>
+        <button type="submit" class="calculate-btn" id="calculateButton"> Calculate Rent </button>
+    </form>
+    <!-- <div id="predictionOutput" style="margin-top: 20px;">
+        <label for="predictionField"><strong>Estimated Rent:</strong></label>
+        <input type="text" id="predictionField" readonly>
+    </div> -->
+</div>
+
+<script>
+
+    // Function to handle form submission
+    function calculateRent() {
+        // Perform form submission and prediction
+        // After receiving the prediction, update the button text with the prediction value
+        var prediction = "{{ prediction }}"; // Prediction value obtained from Flask
+        var calculateButton = document.getElementById('calculateButton');
+        calculateButton.textContent = 'Estimated Rent: ' + prediction;
+
+        // Prevent the form from submitting normally
+        return false;
+    }
+
+    // Call the clearFields function when the page loads
+    window.onload = clearFields;
+
+    function validateForm() {
+        return validateNewlyConst() && validateLivingSpace() && validateNoRoomsRange() && validateGeoPlz();
+    }
+
+    function validateNewlyConst() {
+        // Validation for newly constructed space (No validation needed)
+        return true;
+    }
+
+    function validateLivingSpace() {
+        var livingSpace = document.getElementById('livingSpace').value;
+        var livingSpaceError = document.getElementById('livingSpaceError');
+
+        if (isNaN(livingSpace) || livingSpace < 30 || livingSpace > 650) {
+            livingSpaceError.innerText = 'Living space area must be between 30 and 650 sqm.';
+            return false;
+        } else {
+            livingSpaceError.innerText = '';
+            return true;
+        }
+    }
+
+    function validateNoRoomsRange() {
+        var noRoomsRange = document.getElementById('noRoomsRange').value;
+        var noRoomsRangeError = document.getElementById('noRoomsRangeError');
+
+        if (isNaN(noRoomsRange) || noRoomsRange < 1 || noRoomsRange > 10) {
+            noRoomsRangeError.innerText = 'Number of rooms must be between 1 and 10.';
+            return false;
+        } else {
+            noRoomsRangeError.innerText = '';
+            return true;
+        }
+    }
+
+    function validateGeoPlz() {
+        var geo_plz = document.getElementById('geo_plz').value;
+        var geo_plzError = document.getElementById('geo_plzError');
+
+        if (isNaN(geo_plz) || geo_plz < 1067 || geo_plz > 99998) {
+            geo_plzError.innerText = 'Please enter a valid postal code between 01067 and 99998.';
+            return false;
+        } else {
+            geo_plzError.innerText = '';
+            return true;
+        }
+    }
+</script>
+
+</body>
+</html>
